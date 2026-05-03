@@ -1,15 +1,13 @@
 name: Python application test
 
-# Menjalankan otomatis saat ada aktivitas di branch main
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Menambahkan environment variable untuk Node.js 24 sesuai saran log
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - name: Checkout code
@@ -20,14 +18,7 @@ jobs:
       with:
         python-version: "3.10"
 
-    # Tambahan 1: Memastikan dependensi (jika ada) terinstall
-    # Walaupun sekarang belum pakai library luar, ini standar yang baik
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-
-    # Tambahan 2: Menjalankan test dengan format output yang kamu inginkan
-    # Menggunakan python langsung ke file agar print() kita terlihat rapi
     - name: Run Tests
       run: |
-        python tests/test_evoting.py
+        # Menggunakan -m unittest agar Python otomatis mengenali path folder app
+        python3 -m unittest tests/test_evoting.py
